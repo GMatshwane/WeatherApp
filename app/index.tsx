@@ -7,7 +7,6 @@ import { weatherService } from "../services/weatherService";
 /**
  * This is the main screen of the app.
  * It will fetch the current weather and forecast for the user's location.
- * @returns
  */
 export default function Index() {
   const [loadingMessage, setLoadingMessage] = useState("Loading...");
@@ -16,22 +15,24 @@ export default function Index() {
       // Request permission to access location
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
+        console.log("Permission not granted");
         return;
       }
 
       // Get current location
       const location = await Location.getCurrentPositionAsync();
       setLoadingMessage("GPS location fixed...");
+
+      // Fetch current weather
       const weatherData =
         await weatherService.getCurrentWeather<CurrentWeather>(
           location.coords.latitude.toString(),
-          location.coords.longitude.toString()
+          location.coords.longitude.toString(),
         );
-
-      console.log(weatherData);
     };
     fetchWeather();
   }, []);
+
   return (
     <View
       style={{
