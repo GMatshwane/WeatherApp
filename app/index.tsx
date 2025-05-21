@@ -1,4 +1,5 @@
 import { CurrentWeather } from "@/models/current";
+import { Forcast } from "@/models/forcast";
 import * as Location from "expo-location";
 import { useEffect, useState } from "react";
 import { Text, View } from "react-native";
@@ -29,6 +30,11 @@ export default function Index() {
           location.coords.latitude.toString(),
           location.coords.longitude.toString(),
         );
+
+      const forecastData = await weatherService.getForecast<Forcast>(
+        location.coords.latitude.toString(),
+        location.coords.longitude.toString(),
+      );
     };
     fetchWeather();
   }, []);
