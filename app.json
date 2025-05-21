@@ -33,10 +33,20 @@
           "resizeMode": "contain",
           "backgroundColor": "#ffffff"
         }
+      ],
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+        }
       ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "REACT_APP_WEATHER_API_URL": "https://api.openweathermap.org/data/2.5",
+      "REACT_APP_WEATHER_API_KEY":""
     }
   }
 }
