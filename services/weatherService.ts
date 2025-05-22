@@ -20,12 +20,15 @@ class WeatherService {
    */
   private async fetchWithErrorHandling<T>(endpoint: string): Promise<T> {
     try {
-      const response = await fetch(`${BASE_URL}${endpoint}&appid=${API_KEY}`, {
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `${BASE_URL}${endpoint}&appid=${API_KEY}&units=metric&cnt=100`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "GET",
         },
-        method: "GET",
-      });
+      );
 
       if (!response.ok) {
         throw new WeatherServiceError(
