@@ -1,19 +1,29 @@
-import { render } from "@testing-library/react-native";
+import { render, screen } from "@testing-library/react-native";
 import React from "react";
 import LoadingModal from "../LoadingModal";
 
 describe("LoadingModal", () => {
-  it("renders correctly when visible is true", () => {
-    const { getByText } = render(
-      <LoadingModal visible={true} text="Loading..." />,
-    );
-    expect(getByText("Loading...")).toBeTruthy();
+  it("renders correctly when visible", () => {
+    const testText = "Loading...";
+    render(<LoadingModal visible={true} text={testText} />);
+
+    // Check if the text is rendered
+    expect(screen.getByText(testText)).toBeTruthy();
   });
 
-  it("renders correctly when visible is false", () => {
-    const { queryByText } = render(
-      <LoadingModal visible={false} text="Loading..." />,
-    );
-    expect(queryByText("Loading...")).toBeNull();
+  it("does not render when not visible", () => {
+    const testText = "Loading...";
+    render(<LoadingModal visible={false} text={testText} />);
+
+    // Check if the text is not rendered
+    expect(screen.queryByText(testText)).toBeNull();
+  });
+
+  it("renders with different text content", () => {
+    const customText = "Please wait...";
+    render(<LoadingModal visible={true} text={customText} />);
+
+    // Check if the custom text is rendered
+    expect(screen.getByText(customText)).toBeTruthy();
   });
 });
