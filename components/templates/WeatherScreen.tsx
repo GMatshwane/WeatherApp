@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Location from "expo-location";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { CurrentWeather as CurrentWeatherType } from "../../models/current";
 import { Forcast } from "../../models/forcast";
@@ -46,68 +46,6 @@ const WeatherScreen: React.FC = () => {
   }, []);
 
   /**
-   * The effect to fetch the weather.
-   */
-  useEffect(() => {
-    /**
-     * The function to fetch the weather.
-     */
-    const fetchWeather = async () => {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        return;
-      }
-
-      setLoaderMessage("Getting location");
-      setLoading(true);
-
-      let lastLocation = await locationService.getCurrentLocation();
-      if (!lastLocation) {
-        lastLocation = await locationService.getLastLocation();
-        if (!lastLocation) {
-          throw new Error("No location found");
-        }
-      }
-
-      if (lastLocation) {
-        setLoaderMessage("Getting location based weather data");
-        try {
-          const { currentWeatherData, forecastData } =
-            await getWeatherInformation(lastLocation);
-          if (currentWeatherData) {
-            setCurrentWeatherData(currentWeatherData);
-          }
-          if (forecastData) {
-            setForecastData(forecastData);
-          }
-        } catch (error) {
-          console.error("Error fetching weather data", error);
-        }
-      }
-
-      setLoading(false);
-    };
-
-    /**
-     * Fetch the weather.
-     */
-    fetchWeather();
-  }, []);
-
-  /**
-   * The effect to set the weather theme.
-   */
-  useEffect(() => {
-    if (currentWeatherData?.weather[0]?.description) {
-      const weatherDescription =
-        typeof currentWeatherData.weather[0].description === "string"
-          ? currentWeatherData.weather[0].description
-          : currentWeatherData.weather[0].description;
-      setWeatherTheme(getWeatherBackground(weatherDescription));
-    }
-  }, [currentWeatherData]);
-
-  /**
    * Get the weather information.
    * @param lastLocation - The last location.
    * @returns The weather information.
@@ -136,6 +74,65 @@ const WeatherScreen: React.FC = () => {
   };
 
   /**
+   * The function to fetch the weather.
+   */
+  const fetchWeather = useCallback(async () => {
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      return;
+    }
+
+    setLoaderMessage("Getting location");
+    setLoading(true);
+
+    try {
+      let lastLocation = await locationService.getCurrentLocation();
+      if (!lastLocation) {
+        lastLocation = await locationService.getLastLocation();
+        if (!lastLocation) {
+          throw new Error("No location found");
+        }
+      }
+
+      if (lastLocation) {
+        setLoaderMessage("Getting location based weather data");
+        const { currentWeatherData, forecastData } =
+          await getWeatherInformation(lastLocation);
+        if (currentWeatherData) {
+          setCurrentWeatherData(currentWeatherData);
+        }
+        if (forecastData) {
+          setForecastData(forecastData);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching weather data", error);
+    } finally {
+      setLoading(false);
+    }
+  }, [locationService, weatherService]);
+
+  /**
+   * The effect to fetch the weather.
+   */
+  useEffect(() => {
+    fetchWeather();
+  }, [fetchWeather]);
+
+  /**
+   * The effect to set the weather theme.
+   */
+  useEffect(() => {
+    if (currentWeatherData?.weather[0]?.description) {
+      const weatherDescription =
+        typeof currentWeatherData.weather[0].description === "string"
+          ? currentWeatherData.weather[0].description
+          : currentWeatherData.weather[0].description;
+      setWeatherTheme(getWeatherBackground(weatherDescription));
+    }
+  }, [currentWeatherData]);
+
+  /**
    * The function to toggle the favourite.
    */
   const toggleFavourite = async () => {
@@ -158,8 +155,8 @@ const WeatherScreen: React.FC = () => {
         { backgroundColor: weatherTheme.backgroundColor },
       ]}
     >
-      {currentWeatherData && (
-        <View style={styles.header}>
+      <View style={styles.header}>
+        {currentWeatherData && (
           <CurrentWeather
             location={currentWeatherData?.name}
             temperature={Math.round(currentWeatherData?.main?.temp ?? 0)}
@@ -169,9 +166,11 @@ const WeatherScreen: React.FC = () => {
               (fav) => fav.name === currentWeatherData.name,
             )}
             onToggleFavourite={toggleFavourite}
+            onRefresh={fetchWeather}
+            isLoading={loading}
           />
-        </View>
-      )}
+        )}
+      </View>
       {currentWeatherData && (
         <CurrentWeatherSummary
           temp_min={currentWeatherData?.main?.temp_min ?? 0}

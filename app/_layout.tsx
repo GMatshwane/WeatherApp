@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { Tabs } from "expo-router";
+import { SelectedLocationProvider } from "../contexts/SelectedLocationContext";
 import { WeatherThemeProvider } from "../contexts/WeatherThemeContext";
 import { useWeatherTheme } from "../hooks/useWeatherTheme";
 import { FavouritesServiceProvider } from "../services/favourites/FavouritesServiceContext";
@@ -17,33 +18,35 @@ export default function Layout() {
       <WeatherServiceProvider>
         <FavouritesServiceProvider>
           <WeatherThemeProvider>
-            <Tabs
-              screenOptions={{
-                headerShown: false,
-                tabBarStyle: {
-                  backgroundColor: backgroundColor,
-                },
-              }}
-            >
-              <Tabs.Screen
-                name="index"
-                options={{
-                  title: "Weather",
-                  tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="sunny" size={size} color={color} />
-                  ),
+            <SelectedLocationProvider>
+              <Tabs
+                screenOptions={{
+                  headerShown: false,
+                  tabBarStyle: {
+                    backgroundColor: backgroundColor,
+                  },
                 }}
-              />
-              <Tabs.Screen
-                name="favourites"
-                options={{
-                  title: "Favourites",
-                  tabBarIcon: ({ color, size }) => (
-                    <Ionicons name="heart" size={size} color={color} />
-                  ),
-                }}
-              />
-            </Tabs>
+              >
+                <Tabs.Screen
+                  name="index"
+                  options={{
+                    title: "Weather",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons name="sunny" size={size} color={color} />
+                    ),
+                  }}
+                />
+                <Tabs.Screen
+                  name="favourites"
+                  options={{
+                    title: "Favourites",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons name="heart" size={size} color={color} />
+                    ),
+                  }}
+                />
+              </Tabs>
+            </SelectedLocationProvider>
           </WeatherThemeProvider>
         </FavouritesServiceProvider>
       </WeatherServiceProvider>
