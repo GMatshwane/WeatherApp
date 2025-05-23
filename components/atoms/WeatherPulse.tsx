@@ -7,7 +7,7 @@ import AnimatedPulse from "../molecules/AnimatedPulse";
  * @returns The weather pulse component.
  */
 const WeatherPulse: React.FC = () => (
-  <View style={styles.pulseContainer}>
+  <View testID="weather-pulse" style={styles.pulseContainer}>
     <AnimatedPulse delay={0} />
   </View>
 );
