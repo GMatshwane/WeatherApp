@@ -113,3 +113,11 @@ export interface Sys {
   sunrise: number;
   sunset: number;
 }
+
+/**
+ * The weather type interface.
+ * @property description - The weather description.
+ */
+export interface WeatherType {
+  description: "clear sky" | "rain" | "few clouds";
+}

@@ -3,7 +3,7 @@ import { getDayOfWeek } from "@/utils/date-fns";
 import { getCurrentWeather } from "@/utils/forecast";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
-import CurrentWeatherIcon from "./CurrentWeatherIcon";
+import CurrentWeatherIcon from "../atoms/CurrentWeatherIcon";
 
 /**
  * The forecast item component.

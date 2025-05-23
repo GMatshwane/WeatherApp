@@ -1,6 +1,12 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from "react";
-import { Image, StyleSheet, Text, View } from "react-native";
+import {
+  Image,
+  ImageSourcePropType,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 /**
  * The props for the current weather.
@@ -11,13 +17,17 @@ type CurrentWeatherProps = {
    */
   temperature: number;
   /**
-   * The description.
+   * The weather type.
    */
-  description: string;
+  weatherType: string;
   /**
    * The location.
    */
   location?: string;
+  /**
+   * The background image.
+   */
+  backgroundImage: ImageSourcePropType;
 };
 
 /**
@@ -26,38 +36,26 @@ type CurrentWeatherProps = {
  */
 const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   temperature,
-  description,
+  weatherType,
   location,
+  backgroundImage,
 }) => {
   return (
-    <View>
-      <View>
-        <Image
-          source={require("@/assets/images/forest_cloudy.png")}
-          resizeMode="stretch"
-          style={styles.imageContainer}
-        />
-
-        <View
-          style={{
-            position: "absolute",
-            top: 0,
-            right: 0,
-            bottom: 0,
-            left: 0,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Text style={styles.temperature}>{temperature}°</Text>
-          <Text style={styles.description}>{description}</Text>
-          {location && (
-            <View style={styles.locationContainer}>
-              <Ionicons name="location-outline" size={20} color="#fff" />
-              <Text style={styles.locationText}>{location || "Unknown"}</Text>
-            </View>
-          )}
-        </View>
+    <View style={styles.container}>
+      <Image
+        source={backgroundImage}
+        resizeMode="cover"
+        style={styles.imageContainer}
+      />
+      <View style={styles.overlay}>
+        <Text style={styles.temperature}>{temperature}°</Text>
+        <Text style={styles.description}>{weatherType.toUpperCase()}</Text>
+        {location && (
+          <View style={styles.locationContainer}>
+            <Ionicons name="location-outline" size={20} color="#fff" />
+            <Text style={styles.locationText}>{location || "Unknown"}</Text>
+          </View>
+        )}
       </View>
     </View>
   );
@@ -69,38 +67,41 @@ export default CurrentWeather;
  * The styles for the current weather.
  */
 const styles = StyleSheet.create({
-  /**
-   * The container for the current weather.
-   */
+  container: {
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    overflow: "hidden",
+  },
   imageContainer: {
     width: "100%",
+    height: 300,
   },
-  /**
-   * The temperature for the current weather.
-   */
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.3)",
+  },
   temperature: {
     fontSize: 70,
     fontWeight: "bold",
     color: "#fff",
-    opacity: 0.5,
+    opacity: 1,
   },
-  /**
-   * The description for the current weather.
-   */
   description: {
-    fontSize: 24,
+    fontSize: 20,
     color: "#fff",
     opacity: 0.5,
+    marginBottom: 10,
   },
-  /**
-   * The location text for the current weather.
-   */
   locationText: {
     color: "#fff",
   },
-  /**
-   * The location container for the current weather.
-   */
   locationContainer: {
     flexDirection: "row",
     alignItems: "center",

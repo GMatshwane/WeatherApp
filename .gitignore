@@ -42,3 +42,6 @@ app-example
 # Platforms
 ios/
 android/
+
+# TODO: Remove this after testing. Held back to avoid pushing the api key to the repo.
+app.json
