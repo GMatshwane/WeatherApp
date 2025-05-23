@@ -4,8 +4,10 @@ import LoadingModal from "@/components/atoms/LoadingModal";
 import CurrentWeather from "@/components/molecules/CurrentWeather";
 import { CurrentWeather as CurrentWeatherType } from "@/models/current";
 import { Forcast } from "@/models/forcast";
+import { locationService } from "@/services/locationsService";
 import { weatherService } from "@/services/weatherService";
 import * as Location from "expo-location";
+import { LocationObject } from "expo-location";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 
@@ -25,34 +27,47 @@ export default function Index() {
       // Request permission to access location
       const { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        console.log("Permission not granted");
+        // Permission not granted
         return;
       }
 
       // Indicate loading when location based data
-      setLoaderMessage("Getting your current location");
+      setLoaderMessage("Getting location");
       setLoading(true);
-      const location = await Location.getCurrentPositionAsync();
-
-      //
-      setLoaderMessage("Getting location based weather data");
+      // Try to get the current location first
+      let lastLocation: LocationObject | null =
+        await locationService.getCurrentLocation();
+      if (!lastLocation) {
+        // If current location fails, try to use the last location
+        lastLocation = await locationService.getLastLocation();
+      } else {
+        // If current location is successful, update the last location
+        await locationService.setLastLocation(lastLocation);
+      }
 
       // Fetch current weather
-      const currentWeatherData =
-        await weatherService.getCurrentWeather<CurrentWeatherType>(
-          location.coords.latitude.toString(),
-          location.coords.longitude.toString(),
-        );
+      if (lastLocation) {
+        setLoaderMessage("Getting location based weather data");
+        try {
+          const currentWeatherData =
+            await weatherService.getCurrentWeather<CurrentWeatherType>(
+              lastLocation.coords.latitude.toString(),
+              lastLocation.coords.longitude.toString(),
+            );
 
-      // Set the current weather data
-      setCurrentWeatherData(currentWeatherData);
+          // Set the current weather data
+          setCurrentWeatherData(currentWeatherData);
 
-      // Fetch forecast data
-      const forecastData = await weatherService.getForecast<Forcast>(
-        location.coords.latitude.toString(),
-        location.coords.longitude.toString(),
-      );
-      setForecastData(forecastData);
+          // Fetch forecast data
+          const forecastData = await weatherService.getForecast<Forcast>(
+            lastLocation.coords.latitude.toString(),
+            lastLocation.coords.longitude.toString(),
+          );
+          setForecastData(forecastData);
+        } catch (error) {
+          console.error("Error fetching weather data", error);
+        }
+      }
 
       // Stop loading
       setLoading(false);
