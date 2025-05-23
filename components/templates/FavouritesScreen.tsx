@@ -1,22 +1,31 @@
+import { CurrentWeather } from "@/models/current";
 import { Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
-import { CurrentWeather } from "../../models/current";
+import { useSelectedLocation } from "../../contexts/SelectedLocationContext";
 import { useFavouritesService } from "../../services/favourites/FavouritesServiceContext";
 import ConfirmationModal from "../molecules/ConfirmationModal";
+import FavouriteDetailsModal from "../molecules/FavouriteDetailsModal";
 
 const FavouritesScreen: React.FC = () => {
   const [favourites, setFavourites] = useState<CurrentWeather[]>([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState<string | null>(null);
+  const [detailsModalVisible, setDetailsModalVisible] = useState(false);
+  const [selectedFavourite, setSelectedFavourite] =
+    useState<CurrentWeather | null>(null);
   const favouritesService = useFavouritesService();
+  const { setSelectedLocation: setGlobalSelectedLocation } =
+    useSelectedLocation();
+  const router = useRouter();
 
   /**
    * The function to load the favourites.
@@ -44,6 +53,11 @@ const FavouritesScreen: React.FC = () => {
     setModalVisible(true);
   };
 
+  const confirmViewFavourite = (location: CurrentWeather) => {
+    setSelectedFavourite(location);
+    setDetailsModalVisible(true);
+  };
+
   /**
    * The function to remove a favourite.
    * */
@@ -57,6 +71,10 @@ const FavouritesScreen: React.FC = () => {
     }
   };
 
+  const handleFavouritePress = (location: CurrentWeather) => {
+    setGlobalSelectedLocation(location);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -65,14 +83,23 @@ const FavouritesScreen: React.FC = () => {
       </View>
       <FlatList
         data={favourites}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.name}
         renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>{item.name}</Text>
-            <TouchableOpacity onPress={() => confirmRemoveFavourite(item.name)}>
-              <Ionicons name="trash-outline" size={24} color="#ff0000" />
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={() => handleFavouritePress(item)}>
+            <View style={styles.item}>
+              <Text>{item.name}</Text>
+              <View style={styles.actions}>
+                <TouchableOpacity onPress={() => confirmViewFavourite(item)}>
+                  <Ionicons name="eye-outline" size={24} color="#333" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => confirmRemoveFavourite(item.name)}
+                >
+                  <Ionicons name="trash-outline" size={24} color="#ff0000" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          </TouchableOpacity>
         )}
       />
       <ConfirmationModal
@@ -81,6 +108,11 @@ const FavouritesScreen: React.FC = () => {
         onConfirm={removeFavourite}
         onCancel={() => setModalVisible(false)}
         text={`Remove ${selectedLocation} from favourites?`}
+      />
+      <FavouriteDetailsModal
+        visible={detailsModalVisible}
+        onRequestClose={() => setDetailsModalVisible(false)}
+        location={selectedFavourite}
       />
     </View>
   );
@@ -110,6 +142,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
+  },
+  actions: {
+    flexDirection: "row",
+    gap: 10,
   },
 });
 
