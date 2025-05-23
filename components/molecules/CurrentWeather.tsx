@@ -52,9 +52,9 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
           <Text style={styles.temperature}>{temperature}°</Text>
           <Text style={styles.description}>{description}</Text>
           {location && (
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Ionicons name="location-outline" size={20} color="white" />
-              <Text style={{ color: "white" }}>{location}</Text>
+            <View style={styles.locationContainer}>
+              <Ionicons name="location-outline" size={20} color="#fff" />
+              <Text style={styles.locationText}>{location || "Unknown"}</Text>
             </View>
           )}
         </View>
@@ -81,13 +81,28 @@ const styles = StyleSheet.create({
   temperature: {
     fontSize: 70,
     fontWeight: "bold",
-    color: "white",
+    color: "#fff",
+    opacity: 0.5,
   },
   /**
    * The description for the current weather.
    */
   description: {
     fontSize: 24,
-    color: "white",
+    color: "#fff",
+    opacity: 0.5,
+  },
+  /**
+   * The location text for the current weather.
+   */
+  locationText: {
+    color: "#fff",
+  },
+  /**
+   * The location container for the current weather.
+   */
+  locationContainer: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });

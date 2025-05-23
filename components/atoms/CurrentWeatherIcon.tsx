@@ -38,6 +38,7 @@ const weatherIcons: Record<"clear" | "rain" | "clouds", ImageSourcePropType> = {
 /**
  * The current weather icon component.
  * @param icon - The icon to display.
+ * @param weather - The weather conditions to display.
  * @returns The icon to display.
  */
 const CurrentWeatherIcon: React.FC<CurrentWeatherIconProps> = ({
@@ -91,13 +92,13 @@ const styles = StyleSheet.create({
    */
   text: {
     fontSize: 14,
-    color: "white",
+    color: "#fff",
   },
   /**
    * The small text for the current weather.
    */
   smText: {
     fontSize: 12,
-    color: "white",
+    color: "#fff",
   },
 });

@@ -22,24 +22,24 @@ interface ForecastItemProps {
 const Forecast: React.FC<ForecastItemProps> = ({ item }: ForecastItemProps) => {
   return (
     <View style={styles.container}>
-      <FlatList
-        style={{ marginTop: 10 }}
-        data={item.list}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text style={[styles.text, { width: 100 }]}>
-              {getDayOfWeek(item.dt_txt.toString())}
-            </Text>
-            <CurrentWeatherIcon
-              icon={getCurrentWeather(item.weather[0].main)}
-              weather={item}
-            />
-            <Text style={[styles.text, { width: 80 }]}>
-              {Math.round(item.main.temp)}°
-            </Text>
-          </View>
-        )}
-      />
+      {item && (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={item.list}
+          renderItem={({ item }) => (
+            <View style={styles.item}>
+              <Text style={[styles.text, { width: 70 }]}>
+                {getDayOfWeek(item.dt_txt.toString())}
+              </Text>
+              <CurrentWeatherIcon
+                icon={getCurrentWeather(item.weather[0].main)}
+                weather={item}
+              />
+              <Text style={[styles.text]}>{Math.round(item.main.temp)}°</Text>
+            </View>
+          )}
+        />
+      )}
     </View>
   );
 };
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
    */
   text: {
     color: "#fff",
-    fontSize: 20,
+    fontSize: 16,
     lineHeight: 25,
     marginVertical: 5,
   },

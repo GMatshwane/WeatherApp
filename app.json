@@ -1,16 +1,16 @@
 {
   "expo": {
-    "name": "WeatherApp",
-    "slug": "WeatherApp",
+    "name": "Weatherly",
+    "slug": "weatherly",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "weatherapp",
+    "scheme": "weatherly",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.gordonm87.WeatherApp"
+      "bundleIdentifier": "com.gordonm87.weatherly"
     },
     "android": {
       "adaptiveIcon": {
@@ -22,7 +22,7 @@
         "android.permission.ACCESS_COARSE_LOCATION",
         "android.permission.ACCESS_FINE_LOCATION"
       ],
-      "package": "com.gordonm87.WeatherApp"
+      "package": "com.gordonm87.weatherly"
     },
     "web": {
       "bundler": "metro",
