@@ -1,4 +1,14 @@
-import { API_KEY, BASE_URL } from "@/index";
+import { IWeatherService } from "./IWeatherService";
+
+/**
+ * The weather service config.
+ * @property apiKey - The API key.
+ * @property baseUrl - The base URL.
+ */
+export interface WeatherServiceConfig {
+  apiKey: string;
+  baseUrl: string;
+}
 
 // Error class for API errors
 class WeatherServiceError extends Error {
@@ -12,7 +22,15 @@ class WeatherServiceError extends Error {
  * OpenWeatherMap API weather service class
  * @description Used to fetch weather data from the OpenWeatherMap API
  */
-class WeatherService {
+class WeatherService implements IWeatherService {
+  private apiKey: string;
+  private baseUrl: string;
+
+  constructor(config: WeatherServiceConfig) {
+    this.apiKey = config.apiKey;
+    this.baseUrl = config.baseUrl;
+  }
+
   /**
    * Fetches weather data from the OpenWeatherMap API with error handling
    * @param endpoint - The API endpoint to fetch data from
@@ -21,7 +39,7 @@ class WeatherService {
   private async fetchWithErrorHandling<T>(endpoint: string): Promise<T> {
     try {
       const response = await fetch(
-        `${BASE_URL}${endpoint}&appid=${API_KEY}&units=metric&cnt=100`,
+        `${this.baseUrl}${endpoint}&appid=${this.apiKey}&units=metric&cnt=100`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -71,5 +89,9 @@ class WeatherService {
   }
 }
 
-// Export a singleton instance
-export const weatherService = new WeatherService();
+// Export a factory function to create a WeatherService instance
+export const createWeatherService = (
+  config: WeatherServiceConfig,
+): WeatherService => {
+  return new WeatherService(config);
+};

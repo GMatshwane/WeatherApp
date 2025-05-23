@@ -9,11 +9,18 @@ import {
   View,
 } from "react-native";
 
+/**
+ * The current weather icon props.
+ * @description The current weather icon props.
+ */
 interface CurrentWeatherIconProps {
   /**
    * The icon name to display.
    */
   icon: "clear" | "rain" | "clouds";
+  /**
+   * The weather data.
+   */
   weather: List;
 }
 
@@ -75,10 +82,11 @@ const styles = StyleSheet.create({
    * The container for the current weather icon.
    */
   container: {
-    flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
+    gap: 0,
+    width: 150,
   },
   /**
    * The icon for the current weather.
