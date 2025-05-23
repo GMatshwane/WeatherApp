@@ -20,7 +20,11 @@ const FavouriteButton: React.FC<FavouriteButtonProps> = ({
   onToggle,
 }) => {
   return (
-    <TouchableOpacity onPress={onToggle} style={styles.button}>
+    <TouchableOpacity
+      onPress={onToggle}
+      style={styles.button}
+      testID="favourite-button"
+    >
       <Ionicons
         name={isFavourite ? "heart" : "heart-outline"}
         size={30}

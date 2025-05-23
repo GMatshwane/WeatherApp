@@ -85,6 +85,7 @@ const FavouriteDetailsModal: React.FC<FavouriteDetailsModalProps> = ({
               <TouchableOpacity
                 onPress={onRequestClose}
                 style={styles.closeButton}
+                testID="close-button"
               >
                 <Ionicons name="close" size={24} color="#333" />
               </TouchableOpacity>
