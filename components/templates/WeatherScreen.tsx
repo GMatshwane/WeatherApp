@@ -30,7 +30,24 @@ const WeatherScreen: React.FC = () => {
     backgroundColor: "#f5f5f5",
     backgroundImage: require("../../assets/images/forest_sunny.png"),
   });
+  const [favourites, setFavourites] = useState<CurrentWeatherType[]>([]);
 
+  /**
+   * The effect to load the favourites.
+   */
+  useEffect(() => {
+    const loadFavourites = async () => {
+      const storedFavourites = await AsyncStorage.getItem("favourites");
+      if (storedFavourites) {
+        setFavourites(JSON.parse(storedFavourites));
+      }
+    };
+    loadFavourites();
+  }, []);
+
+  /**
+   * The effect to fetch the weather.
+   */
   useEffect(() => {
     /**
      * The function to fetch the weather.
@@ -77,6 +94,9 @@ const WeatherScreen: React.FC = () => {
     fetchWeather();
   }, []);
 
+  /**
+   * The effect to set the weather theme.
+   */
   useEffect(() => {
     if (currentWeatherData?.weather[0]?.description) {
       const weatherDescription =
@@ -115,6 +135,22 @@ const WeatherScreen: React.FC = () => {
     return { currentWeatherData, forecastData };
   };
 
+  /**
+   * The function to toggle the favourite.
+   */
+  const toggleFavourite = async () => {
+    if (!currentWeatherData) {
+      return;
+    }
+    const newFavourites = favourites.some(
+      (fav) => fav.id === currentWeatherData.id,
+    )
+      ? favourites.filter((fav) => fav.id !== currentWeatherData.id)
+      : [...favourites, currentWeatherData];
+    setFavourites(newFavourites);
+    await AsyncStorage.setItem("favourites", JSON.stringify(newFavourites));
+  };
+
   return (
     <View
       style={[
@@ -123,12 +159,18 @@ const WeatherScreen: React.FC = () => {
       ]}
     >
       {currentWeatherData && (
-        <CurrentWeather
-          location={currentWeatherData?.name}
-          temperature={Math.round(currentWeatherData?.main?.temp ?? 0)}
-          weatherType={currentWeatherData?.weather[0]?.description ?? ""}
-          backgroundImage={weatherTheme.backgroundImage}
-        />
+        <View style={styles.header}>
+          <CurrentWeather
+            location={currentWeatherData?.name}
+            temperature={Math.round(currentWeatherData?.main?.temp ?? 0)}
+            weatherType={currentWeatherData?.weather[0]?.description ?? ""}
+            backgroundImage={weatherTheme.backgroundImage}
+            isFavourite={favourites.some(
+              (fav) => fav.name === currentWeatherData.name,
+            )}
+            onToggleFavourite={toggleFavourite}
+          />
+        </View>
       )}
       {currentWeatherData && (
         <CurrentWeatherSummary
@@ -151,5 +193,10 @@ export default WeatherScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
   },
 });

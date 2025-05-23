@@ -7,6 +7,7 @@ import {
   Text,
   View,
 } from "react-native";
+import FavouriteButton from "../atoms/FavouriteButton";
 
 /**
  * The props for the current weather.
@@ -28,6 +29,8 @@ type CurrentWeatherProps = {
    * The background image.
    */
   backgroundImage: ImageSourcePropType;
+  isFavourite?: boolean;
+  onToggleFavourite?: () => void;
 };
 
 /**
@@ -39,6 +42,8 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
   weatherType,
   location,
   backgroundImage,
+  isFavourite = false,
+  onToggleFavourite,
 }) => {
   return (
     <View style={styles.container}>
@@ -54,6 +59,14 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
           <View style={styles.locationContainer}>
             <Ionicons name="location-outline" size={20} color="#fff" />
             <Text style={styles.locationText}>{location || "Unknown"}</Text>
+          </View>
+        )}
+        {onToggleFavourite && (
+          <View style={{ position: "absolute", top: 50, right: 10 }}>
+            <FavouriteButton
+              isFavourite={isFavourite}
+              onToggle={onToggleFavourite}
+            />
           </View>
         )}
       </View>

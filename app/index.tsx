@@ -1,9 +1,6 @@
-import { WeatherServiceProvider } from "@/services/weather/WeatherServiceContext";
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import WeatherScreen from "../components/templates/WeatherScreen";
-import { LocationServiceProvider } from "../services/location/LocationServiceContext";
 
 /**
  * The main app component.
@@ -11,15 +8,9 @@ import { LocationServiceProvider } from "../services/location/LocationServiceCon
  */
 export default function App() {
   return (
-    <SafeAreaProvider>
-      <LocationServiceProvider>
-        <WeatherServiceProvider>
-          <View style={styles.container}>
-            <WeatherScreen />
-          </View>
-        </WeatherServiceProvider>
-      </LocationServiceProvider>
-    </SafeAreaProvider>
+    <View style={styles.container}>
+      <WeatherScreen />
+    </View>
   );
 }
 
@@ -33,6 +24,5 @@ const styles = StyleSheet.create({
    */
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
   },
 });
