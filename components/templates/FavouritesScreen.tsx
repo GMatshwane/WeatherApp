@@ -4,11 +4,11 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-  FlatList,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    FlatList,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import { useSelectedLocation } from "../../contexts/SelectedLocationContext";
 import { useFavouritesService } from "../../services/favourites/FavouritesServiceContext";
