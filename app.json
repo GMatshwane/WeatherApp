@@ -52,7 +52,7 @@
     },
     "extra": {
       "REACT_APP_WEATHER_API_URL": "https://api.openweathermap.org/data/2.5",
-      "REACT_APP_WEATHER_API_KEY": "9c79ec088fbffefdf817165bc66854c7"
+      "REACT_APP_WEATHER_API_KEY": ""
     }
   }
 }
