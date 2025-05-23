@@ -57,6 +57,7 @@ const AnimatedPulse: React.FC<AnimatedPulseProps> = ({ delay }) => {
 
   return (
     <Animated.View
+      testID="animated-pulse"
       style={[
         styles.pulseCircle,
         {

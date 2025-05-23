@@ -1,5 +1,5 @@
 import { Forcast } from "@/models/forcast";
-import { getDayOfWeek } from "@/utils/date-fns";
+import { getDayOfWeek } from "@/utils/date-functions";
 import { getCurrentWeather } from "@/utils/forecast";
 import React from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
