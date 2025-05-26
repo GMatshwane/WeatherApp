@@ -109,7 +109,7 @@ const CurrentWeather: React.FC<CurrentWeatherProps> = ({
                 disabled={isLoading}
               >
                 <Animated.View style={{ transform: [{ rotate: spin }] }}>
-                  <FontAwesome name="refresh" size={24} color={"#666666"} />
+                  <FontAwesome name="refresh" size={24} color={"#ffffaa"} />
                 </Animated.View>
               </TouchableOpacity>
             )}
