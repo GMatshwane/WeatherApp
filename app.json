@@ -14,7 +14,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
@@ -52,7 +52,13 @@
     },
     "extra": {
       "REACT_APP_WEATHER_API_URL": "https://api.openweathermap.org/data/2.5",
-      "REACT_APP_WEATHER_API_KEY": ""
+      "REACT_APP_PLACES_API_URL": "https://maps.googleapis.com/maps/api/place/",
+      "REACT_APP_WEATHER_API_KEY": "",
+      "REACT_APP_PLACES_API_KEY": "",
+      "router": {},
+      "eas": {
+        "projectId": "04461f96-d4ca-4f5b-ac9c-10f84c8184e8"
+      }
     }
   }
 }
