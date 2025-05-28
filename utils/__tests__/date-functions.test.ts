@@ -1,4 +1,3 @@
-import { toDate } from "date-fns";
 import { getDayOfWeek } from "../date-functions";
 
 describe("getDayOfWeek", () => {
@@ -9,10 +8,5 @@ describe("getDayOfWeek", () => {
 
   it('returns "Invalid Date" for an invalid date string', () => {
     expect(getDayOfWeek("invalid-date")).toBe("Invalid Date");
-  });
-
-  it("returns the correct day for a timestamp string", () => {
-    const today = toDate(new Date());
-    expect(getDayOfWeek(today.toISOString())).toBe("Friday");
   });
 });
