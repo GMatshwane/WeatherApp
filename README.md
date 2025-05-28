@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/johndoe/weatherly/branch/main/graph/badge.svg)](https://codecov.io/gh/johndoe/weatherly)
+
 # Weather App
 
 A modern weather application built with React Native and Expo, providing real-time weather information and 5-day forecasts.
