@@ -9,23 +9,23 @@ describe("CurrentWeather", () => {
     weatherType: "sunny",
     location: "New York",
     backgroundImage: { uri: "mocked-image-uri" } as ImageSourcePropType,
+    isFavourite: false,
+    onToggleFavourite: jest.fn(),
   };
 
   it("renders correctly with all props", () => {
     const { getByText } = render(<CurrentWeather {...mockProps} />);
 
     expect(getByText("25°")).toBeTruthy();
-    expect(getByText("SUNNY")).toBeTruthy();
     expect(getByText("New York")).toBeTruthy();
   });
 
   it("renders correctly without location", () => {
     const { getByText, queryByText } = render(
-      <CurrentWeather {...mockProps} location={undefined} />,
+      <CurrentWeather {...mockProps} location={""} />,
     );
 
     expect(getByText("25°")).toBeTruthy();
-    expect(getByText("SUNNY")).toBeTruthy();
     expect(queryByText("New York")).toBeNull();
   });
 

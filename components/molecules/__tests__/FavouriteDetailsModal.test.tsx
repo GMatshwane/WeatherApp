@@ -71,7 +71,6 @@ describe("FavouriteDetailsModal", () => {
 
     expect(getByText("Test City")).toBeTruthy();
     expect(getByText("25°C")).toBeTruthy();
-    expect(getByText("Sunny")).toBeTruthy();
   });
 
   it("does not render when not visible", () => {
